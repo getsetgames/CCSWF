@@ -31,6 +31,7 @@ All fixes/improvements are welcome, there are a couple things that we would like
    * ActionScript 3.0 support
    * Native Objective-C SWF parsing
    * Use the Cocos2D scene graph to render the SWF hierarchy
+   * Documentation
 
 There are two versions of CCSWF:
 
