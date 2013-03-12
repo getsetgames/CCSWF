@@ -19,7 +19,7 @@ How does it work?
 -----------------
 In its current state CCSWF wraps gameswf in a CCSWF class that inherits from CCNode. In other words, create an instance of CCSWF using code like:
 
-	CCNode *swf = [CCSWFNode nodeWithSWFFile:[[NSBundle mainBundle] pathForResource:@"menu002" ofType:@"swf"]];
+	CCNode *swf = [CCSWFNode nodeWithSWFFile:[[NSBundle mainBundle] pathForResource:@"HelloWorld" ofType:@"swf"]];
 	[self addChild:swf];
 
 That's it, you can *almost* treat your CCSWFNode as any other CCNode.
