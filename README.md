@@ -17,7 +17,7 @@ CCSWF final goal would be to move away from gameswf and implement a native inter
 
 How does it work?
 -----------------
-In its current state CCSWF wraps gameswf in a CCSWF class that inherits from CCNode. In other words, create an instance of CCSWF using code like:
+In its current state CCSWF wraps gameswf in a CCSWFNode class that inherits from CCNode. In other words, create an instance of CCSWFNode using code like:
 
 	CCNode *swf = [CCSWFNode nodeWithSWFFile:[[NSBundle mainBundle] pathForResource:@"HelloWorld" ofType:@"swf"]];
 	[self addChild:swf];
