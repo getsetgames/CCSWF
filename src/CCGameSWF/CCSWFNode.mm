@@ -99,6 +99,8 @@
 
 @implementation CCSWFNode
 
+@synthesize movieName = m_movieName;
+
 +(id) nodeWithSWFFile:(NSString*)file
 {
     return [[[CCSWFNode alloc] initWithSWFFile:file] autorelease];

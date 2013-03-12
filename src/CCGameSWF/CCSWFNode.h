@@ -24,6 +24,8 @@
     NSMutableArray *m_touchEvents;
 }
 
+@property (readonly) NSString *movieName;
+
 +(id) nodeWithSWFFile:(NSString*)file;
 -(id) initWithSWFFile:(NSString*)file;
 

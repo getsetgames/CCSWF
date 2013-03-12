@@ -6,9 +6,11 @@ What is CCSWF's state?
 ----------------------
 Although CCSWF is in a somewhat usable state, it is a long way from a full production state. Use at your own risk. Since CCSWF is currently based upon gameswf it inherits any of its original limitations, visit the [gameswf website][1] for more info. A lot of testing needs to be done to get CCSWF to a stable release, please report any issues or contribute to make it better.
 Touch input and transformations have not been tested on all devices. -Report problems
-Masking is not working. -Do not report this.
-Sound is not working, -Do not report this.
-As with gameswf only ActionScript 2.0 is supported (make sure to publish your SWF files with ActionScript 2.0)
+
+* Masking is not working. -Do not report this.
+* Sound is not working, -Do not report this.
+* As with gameswf only ActionScript 2.0 is supported (make sure to publish your SWF files with ActionScript 2.0)
+* Scaling the movie breaks the touches TODO
 
 Are there plans for the future?
 -------------------------------
