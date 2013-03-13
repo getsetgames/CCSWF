@@ -99,7 +99,15 @@
 
 @implementation CCSWFNode
 
-@synthesize movieName = m_movieName;
+-(NSString*) movieName
+{
+    return [NSString stringWithUTF8String:imp->m_movie->m_movie->m_name.c_str()];
+}
+
+-(void) setMovieName:(NSString *)movieName
+{
+    imp->m_movie->m_movie->m_name = [movieName UTF8String];
+}
 
 +(id) nodeWithSWFFile:(NSString*)file
 {
@@ -119,7 +127,6 @@
         }
         m_movieWidth = imp->m_movie->m_def->m_frame_size.m_x_max - imp->m_movie->m_def->m_frame_size.m_x_min;
         m_movieHeight = imp->m_movie->m_def->m_frame_size.m_y_max - imp->m_movie->m_def->m_frame_size.m_y_min;
-        m_movieName = [[NSString alloc] initWithUTF8String:imp->m_movie->m_movie->m_name.c_str()];
         m_localScaleX = (imp->m_movie->get_movie_width() / m_movieWidth);
         m_localScaleY = -(imp->m_movie->get_movie_height() / m_movieHeight);
         m_scaleX = 1.0;
@@ -171,7 +178,6 @@
 
 -(void) dealloc
 {
-    [m_movieName release];
     [m_touchEvents release];
     [super dealloc];
 }

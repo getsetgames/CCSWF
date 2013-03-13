@@ -40,12 +40,13 @@
 		CGSize size = [[CCDirector sharedDirector] winSize];
         
         // load and add the "Hello World" flash movie to the hierarchy //
-        CCNode *swf = [CCSWFNode nodeWithSWFFile:[[NSBundle mainBundle] pathForResource:@"HelloWorld" ofType:@"swf"]];
+        CCSWFNode *swf = [CCSWFNode nodeWithSWFFile:[[NSBundle mainBundle] pathForResource:@"HelloWorld" ofType:@"swf"]];
+        swf.movieName = @"SWFMovie1";
         [self addChild:swf];
         // position it on the center of the screen //
         swf.position =  ccp( size.width /2 , size.height/2 );
         // register as listeners to the fscommands from the swf movie //
-        [[CCGameSWF sharedInstance] addFscommandResponder:self forMovieNamed:[(CCSWFNode*)swf movieName]];
+        [[CCGameSWF sharedInstance] addFscommandResponder:self forMovieNamed:swf.movieName];
         // scale it down if the device is not retina //
         //swf.scale = 0.5f * CC_CONTENT_SCALE_FACTOR(); // WARNING: Scalinf the movie breaks touches //
 		
@@ -76,7 +77,7 @@
 {
     if ([command isEqualToString:@"printSomething"])
     {
-        NSLog(@"%@", args);
+        NSLog(@"%@: %@", movieName, args);
     }
 }
 @end

@@ -20,11 +20,10 @@
     GLfloat m_localScaleY;
     GLfloat m_scaleX;
     GLfloat m_scaleY;
-    NSString *m_movieName;
     NSMutableArray *m_touchEvents;
 }
 
-@property (readonly) NSString *movieName;
+@property (nonatomic, assign) NSString *movieName;
 
 +(id) nodeWithSWFFile:(NSString*)file;
 -(id) initWithSWFFile:(NSString*)file;
