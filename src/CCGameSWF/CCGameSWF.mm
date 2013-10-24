@@ -24,11 +24,7 @@ static void     CCGameSWF_log_handler           (bool error, const char* message
 
 +(CCGameSWF*) sharedInstance
 {
-    static CCGameSWF *s_ccGameSWF_sharedInstance = nil;
-    if (!s_ccGameSWF_sharedInstance)
-    {
-        s_ccGameSWF_sharedInstance = [[CCGameSWF alloc] init];
-    }
+    static CCGameSWF *s_ccGameSWF_sharedInstance = [[CCGameSWF alloc] init];
     return s_ccGameSWF_sharedInstance;
 }
 
@@ -46,8 +42,8 @@ static void     CCGameSWF_log_handler           (bool error, const char* message
 #endif
         
         // TODO: Enable audio //
-        //    sound = gameswf::create_sound_handler_openal();
-        //    gameswf::set_sound_handler(sound);
+//        sound = gameswf::create_sound_handler_openal();
+//        gameswf::set_sound_handler(sound);
         gameswf::set_sound_handler(0);
         
         gameswf::render_handler*	render = gameswf::create_render_handler_ogles();
@@ -166,6 +162,7 @@ tu_file* CCGameSWF_file_opener (const char* url_or_path)
 		{
 			return NULL;
 		}
+        [fileURL release];
 		
 		// write swf
 		{

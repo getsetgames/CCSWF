@@ -1,6 +1,5 @@
 //
 //  CCSWFNode.m
-//  GSGGameSWF
 //
 //  Created by dario on 13-02-25.
 //
@@ -37,7 +36,7 @@
 
 +(id) touchContainerWithPosition:(CGPoint)position andState:(int)state
 {
-    return [[CCSWFNode_touchContainer alloc] initWithPosition:position andState:state];
+    return [[[CCSWFNode_touchContainer alloc] initWithPosition:position andState:state] autorelease];
 }
 
 -(id) initWithPosition:(CGPoint)position andState:(int)state
@@ -60,11 +59,18 @@
     gameswf::gc_ptr<gameswf::root>	m_movie;
 }
 
++(gameswf::gc_ptr<gameswf::player>) sharedPlayer;
 -(id) initWithSWFFile:(NSString*)file;
 
 @end
 
 @implementation CCSWFNode_imp
+
++(gameswf::gc_ptr<gameswf::player>) sharedPlayer
+{
+    static gameswf::gc_ptr<gameswf::player> k_player = new gameswf::player();
+    return k_player;
+}
 
 -(id) initWithSWFFile:(NSString *)file
 {
@@ -73,7 +79,8 @@
     {
         // make sure CCGameSWF is initialized //
         [CCGameSWF sharedInstance];
-        m_player = new gameswf::player();
+        m_player = [[self class] sharedPlayer];
+        m_player->set_separate_thread(false);
         m_movie = m_player->load_file([file UTF8String]);
         if (m_movie == NULL)
         {
@@ -88,8 +95,8 @@
 
 -(void) dealloc
 {
-    delete m_movie;
-    delete m_player;
+    m_movie = NULL;
+    m_player = NULL;
     [super dealloc];
 }
 
@@ -99,6 +106,24 @@
 
 @implementation CCSWFNode
 
+@synthesize autoUpdate = m_autoUpdate;
+-(void) setAutoUpdate:(BOOL)autoUpdate
+{
+    if (self.isRunning)
+    {
+        if (!autoUpdate && m_autoUpdate)
+        {
+            [self unscheduleUpdate];
+        }
+        else if (autoUpdate && !m_autoUpdate)
+        {
+            [self scheduleUpdate];
+        }
+    }
+    
+    m_autoUpdate = autoUpdate;
+}
+
 -(NSString*) movieName
 {
     return [NSString stringWithUTF8String:imp->m_movie->m_movie->m_name.c_str()];
@@ -107,6 +132,16 @@
 -(void) setMovieName:(NSString *)movieName
 {
     imp->m_movie->m_movie->m_name = [movieName UTF8String];
+}
+
+-(CGSize) displayContentSize
+{
+    return CGSizeMake(self.contentSize.width * m_localScaleX, self.contentSize.height * m_localScaleY);
+}
+
+-(CGSize) displayContentSizeInPixels
+{
+    return CGSizeMake(self.contentSizeInPixels.width * m_localScaleX, self.contentSizeInPixels.height * m_localScaleY);
 }
 
 +(id) nodeWithSWFFile:(NSString*)file
@@ -179,19 +214,25 @@
 -(void) dealloc
 {
     [m_touchEvents release];
+    [imp release];
     [super dealloc];
 }
 
--(void) onEnterTransitionDidFinish
+-(void) onEnter
 {
-    [self scheduleUpdate];
+    if (m_autoUpdate)
+    {
+        [self scheduleUpdate];
+    }
     [[CCTouchDispatcher sharedDispatcher] addTargetedDelegate:self priority:1 swallowsTouches:YES];
+    [super onEnterTransitionDidFinish];
 }
 
 -(void) onExit
 {
     [self unscheduleAllSelectors];
     [[CCTouchDispatcher sharedDispatcher] removeDelegate:self];
+    [super onExit];
 }
 
 -(CGPoint) getTouchInMovieCoordinates:(UITouch*)touch
@@ -251,9 +292,20 @@
         imp->m_movie->notify_mouse_state(touch.position.x, touch.position.y, touch.state);
         [m_touchEvents removeObjectAtIndex:0];
     }
+    
     imp->m_movie->advance(dt);
     // TODO: Enable sound //
     // sound->advance(dt);
+}
+
+-(const char*) callFuncationNamed:(NSString*)functionName withArguments:(NSString*)argsFormat, ...
+{
+    va_list	args;
+    va_start(args, argsFormat);
+    const char*	result = imp->m_movie->call_method_args([functionName UTF8String], [argsFormat UTF8String], args);
+    va_end(args);
+    
+    return result;
 }
 
 -(void) draw

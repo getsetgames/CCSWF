@@ -1,6 +1,5 @@
 //
 //  CCSWFNode.h
-//  GSGGameSWF
 //
 //  Created by dario on 13-02-25.
 //
@@ -21,12 +20,21 @@
     GLfloat m_scaleX;
     GLfloat m_scaleY;
     NSMutableArray *m_touchEvents;
+    
+    BOOL m_autoUpdate;
 }
 
+@property (nonatomic, assign) BOOL autoUpdate;
 @property (nonatomic, assign) NSString *movieName;
+@property (nonatomic, readonly) CGSize displayContentSize;
+@property (nonatomic, readonly) CGSize displayContentSizeInPixels;
+
 
 +(id) nodeWithSWFFile:(NSString*)file;
 -(id) initWithSWFFile:(NSString*)file;
+
+-(void) update:(ccTime)dt;
+-(const char*) callFuncationNamed:(NSString*)functionName withArguments:(NSString*)argsFormat, ...;
 
 @end
 
